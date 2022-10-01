@@ -14,7 +14,17 @@ export const createTodo = (newTodo: CreateTodoRequest, userId: string) => {
 }
 
 // TODO: Implement businessLogic
-export const deleteTodo = (newTodo: string, userId: string) => {
+export const deleteTodo = (todoId: string, userId: string) => {
+  const todoItem = {}
+  return todoItem
+}
+
+// TODO: Implement businessLogic
+export const updateTodo = (
+  updatedTodo: UpdateTodoRequest,
+  todoId: string,
+  userId: string
+) => {
   const todoItem = {}
   return todoItem
 }
