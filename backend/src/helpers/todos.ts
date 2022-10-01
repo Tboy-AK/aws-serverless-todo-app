@@ -8,3 +8,7 @@ import * as uuid from 'uuid'
 import * as createError from 'http-errors'
 
 // TODO: Implement businessLogic
+export const createTodo = (newTodo: CreateTodoRequest, userId: string) => {
+  const todoItem = {}
+  return todoItem
+}
