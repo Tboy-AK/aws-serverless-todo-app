@@ -31,3 +31,11 @@ export const getTodosForUser = (userId: string): Array<object> => {
   const todoItem = []
   return todoItem
 }
+
+export const createAttachmentPresignedUrl = (
+  todoId: string,
+  userId: string
+): string => {
+  const presignedUrl = ''
+  return presignedUrl
+}
