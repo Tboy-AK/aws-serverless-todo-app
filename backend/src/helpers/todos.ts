@@ -1,9 +1,9 @@
 import * as uuid from 'uuid'
 import * as createError from 'http-errors'
+import { createLogger } from '../utils/logger'
 import { TodosAccess } from './todosAccess'
 import { AttachmentUtils } from './attachmentUtils'
 import { TodoItem } from '../models/TodoItem'
-import { createLogger } from '../utils/logger'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 
@@ -28,12 +28,13 @@ export const deleteTodo = (todoId: string, userId: string) => {
 }
 
 export const updateTodo = (
-  updatedTodo: UpdateTodoRequest,
+  todoUpdate: UpdateTodoRequest,
   todoId: string,
   userId: string
 ) => {
-  const todoItem = {}
-  return todoItem
+  const todoKey = { userId, todoId }
+  const newTodoItem = new TodosAccess().updateTodo(todoUpdate, todoKey)
+  return newTodoItem
 }
 
 export const getTodosForUser = (userId: string): Array<object> => {
