@@ -1,6 +1,6 @@
 import * as AWS from 'aws-sdk'
 import * as AWSXRay from 'aws-xray-sdk'
-import { DocumentClient } from 'aws-sdk/clients/dynamodb'
+import { DocumentClient, QueryOutput } from 'aws-sdk/clients/dynamodb'
 import { createLogger } from '../utils/logger'
 import { TodoItem } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate'
@@ -19,12 +19,14 @@ export class TodosAccess {
   private documentClient = new DocumentClient()
 
   createTodo = async (item: TodoItem) => {
-    const todoItem = await this.documentClient
+    const response = await this.documentClient
       .put({
         TableName: this.tableName,
         Item: item
       })
       .promise()
+
+    const todoItem: any = response.$response.data
 
     return todoItem
   }
@@ -42,7 +44,7 @@ export class TodosAccess {
       expressionAttributeValues[`:${attribute}`] = item[attribute]
     })
 
-    const todoItem = await this.documentClient
+    const response = await this.documentClient
       .update({
         TableName: this.tableName,
         Key: key,
@@ -52,22 +54,26 @@ export class TodosAccess {
       })
       .promise()
 
+    const todoItem: any = response.$response.data
+
     return todoItem
   }
 
   deleteTodo = async (key: UpdateTodoKeyInterface) => {
-    const todoItem = await this.documentClient
+    const response = await this.documentClient
       .delete({
         TableName: this.tableName,
         Key: key
       })
       .promise()
 
+    const todoItem: any = response.$response.data
+
     return todoItem
   }
 
   getTodosForUser = async (userId: string) => {
-    const todoItem = await this.documentClient
+    const response = await this.documentClient
       .query({
         TableName: this.tableName,
         IndexName: this.indexName,
@@ -77,6 +83,8 @@ export class TodosAccess {
         }
       })
       .promise()
-    return todoItem
+
+    const todoItem = response.$response.data as QueryOutput
+    return todoItem.Items
   }
 }
