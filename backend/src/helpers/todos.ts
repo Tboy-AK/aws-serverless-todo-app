@@ -12,16 +12,20 @@ export const createTodo = async (
   newTodo: CreateTodoRequest,
   userId: string
 ) => {
+  const todoId = uuid.v4()
+  const attachmentUrl = createAttachmentPresignedUrl(todoId, userId)
   const todoItem: TodoItem = {
     name: newTodo.name,
     dueDate: newTodo.dueDate,
-    attachmentUrl: '',
+    attachmentUrl,
     createdAt: new Date().toISOString(),
     done: false,
     userId,
-    todoId: uuid.v4()
+    todoId
   }
+
   const newTodoItem = await new TodosAccess().createTodo(todoItem)
+
   return newTodoItem
 }
 
@@ -52,7 +56,10 @@ export const getTodosForUser = async (userId: string) => {
 export const createAttachmentPresignedUrl = (
   todoId: string,
   userId: string
-): string => {
-  const presignedUrl = ''
+) => {
+  const imageId = `${userId}/${todoId}`
+  const presignedUrl = new AttachmentUtils().createAttachmentPresignedUrl(
+    imageId
+  )
   return presignedUrl
 }

@@ -146,9 +146,37 @@ resources:
     AttachmentsBucket:
       Type: AWS::S3::Bucket
       Properties:
+        BucketName: ${self:provider.environment.ATTACHMENT_S3_BUCKET}
+        CorsConfiguration:
+          CorsRules:
+            - AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              AllowedOrigins:
+                - "*"
+              AllowedHeaders:
+                - "*"
+              MaxAge: 3000
 
     # TODO: Complete the policy below and attach it to the bucket defined above
     # For cross referencing the name of the bucket, use "!Ref AttachmentsBucket"
     BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
+        Bucket: !Ref AttachmentsBucket
+        PolicyDocument:
+          Id: MyPolicy
+          Version: "2012-10-17"
+          Statement:
+            - Sid: PublicReadForGetBucketObjects
+              Effects: Allow
+              Principal: "*"
+              Action: "s3:GetObject"
+              Resource: !Join
+            - ""
+            - - "arn:aws:s3:::"
+              - !Ref AttachmentsBucket
+              - /*
