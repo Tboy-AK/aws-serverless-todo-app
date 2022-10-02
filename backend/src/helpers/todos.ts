@@ -9,8 +9,17 @@ import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 
 // TODO: Implement businessLogic
 export const createTodo = (newTodo: CreateTodoRequest, userId: string) => {
-  const todoItem = {}
-  return todoItem
+  const todoItem: TodoItem = {
+    name: newTodo.name,
+    dueDate: newTodo.dueDate,
+    attachmentUrl: '',
+    createdAt: new Date().toISOString(),
+    done: false,
+    userId,
+    todoId: uuid.v4()
+  }
+  const newTodoItem = new TodosAccess().createTodo(todoItem)
+  return newTodoItem
 }
 
 export const deleteTodo = (todoId: string, userId: string) => {
