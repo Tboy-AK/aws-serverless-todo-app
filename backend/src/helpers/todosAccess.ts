@@ -12,7 +12,8 @@ interface UpdateTodoKeyInterface {
 }
 
 export class TodosAccess {
-  private tableName = process.env.TODOS_TABLE
+  private readonly tableName = process.env.TODOS_TABLE
+  private readonly indexName = process.env.TODOS_CREATED_AT_INDEX
   private XAWS = AWSXRay.captureAWS(AWS)
   private logger = createLogger('TodosAccess')
   private documentClient = new DocumentClient()
@@ -51,6 +52,31 @@ export class TodosAccess {
       })
       .promise()
 
+    return todoItem
+  }
+
+  deleteTodo = async (key: UpdateTodoKeyInterface) => {
+    const todoItem = await this.documentClient
+      .delete({
+        TableName: this.tableName,
+        Key: key
+      })
+      .promise()
+
+    return todoItem
+  }
+
+  getTodosForUser = async (userId: string) => {
+    const todoItem = await this.documentClient
+      .query({
+        TableName: this.tableName,
+        IndexName: this.indexName,
+        KeyConditionExpression: 'userId = :userId',
+        ExpressionAttributeValues: {
+          ':userId': userId
+        }
+      })
+      .promise()
     return todoItem
   }
 }

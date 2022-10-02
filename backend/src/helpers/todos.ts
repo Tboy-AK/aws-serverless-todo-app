@@ -8,7 +8,10 @@ import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 
 // TODO: Implement businessLogic
-export const createTodo = (newTodo: CreateTodoRequest, userId: string) => {
+export const createTodo = async (
+  newTodo: CreateTodoRequest,
+  userId: string
+) => {
   const todoItem: TodoItem = {
     name: newTodo.name,
     dueDate: newTodo.dueDate,
@@ -18,28 +21,32 @@ export const createTodo = (newTodo: CreateTodoRequest, userId: string) => {
     userId,
     todoId: uuid.v4()
   }
-  const newTodoItem = new TodosAccess().createTodo(todoItem)
+  const newTodoItem = await new TodosAccess().createTodo(todoItem)
   return newTodoItem
 }
 
-export const deleteTodo = (todoId: string, userId: string) => {
-  const todoItem = {}
-  return todoItem
+export const deleteTodo = async (todoId: string, userId: string) => {
+  const todoKey = { userId, todoId }
+  const deletedTodoItem = await new TodosAccess().deleteTodo(todoKey)
+  return deletedTodoItem
 }
 
-export const updateTodo = (
+export const updateTodo = async (
   todoUpdate: UpdateTodoRequest,
   todoId: string,
   userId: string
 ) => {
   const todoKey = { userId, todoId }
-  const newTodoItem = new TodosAccess().updateTodo(todoUpdate, todoKey)
-  return newTodoItem
+  const updatedTodoItem = await new TodosAccess().updateTodo(
+    todoUpdate,
+    todoKey
+  )
+  return updatedTodoItem
 }
 
-export const getTodosForUser = (userId: string): Array<object> => {
-  const todoItem = []
-  return todoItem
+export const getTodosForUser = async (userId: string) => {
+  const todoItems = await new TodosAccess().getTodosForUser(userId)
+  return todoItems
 }
 
 export const createAttachmentPresignedUrl = (
