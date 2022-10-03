@@ -28,7 +28,8 @@
     "serverless-webpack": "^5.2.0",
     "ts-loader": "^5.3.3",
     "typescript": ">=3.8.0",
-    "webpack": "^4.29.6"
+    "webpack": "^4.29.6",
+    "webpack-node-externals": "^3.0.0"
   },
   "author": "Tobi Akanji",
   "license": "MIT"
