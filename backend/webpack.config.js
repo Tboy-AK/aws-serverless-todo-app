@@ -22,4 +22,11 @@ module.exports = {
       { test: /\.tsx?$/, loader: 'ts-loader' },
     ],
   },
+  watch: true,
+  watchOptions: {
+    aggregateTimeout: 200,
+    poll: 1000,
+    followSymlinks: true,
+    stdin: true,
+  },
 };
