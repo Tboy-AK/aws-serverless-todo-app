@@ -1,5 +1,4 @@
 import { CustomAuthorizerEvent, CustomAuthorizerResult } from 'aws-lambda'
-import 'source-map-support/register'
 import { verify } from 'jsonwebtoken'
 import Axios from 'axios'
 import { createLogger } from '../../utils/logger'
@@ -9,6 +8,17 @@ import { JwtPayload } from '../../auth/JwtPayload'
 const logger = createLogger('auth')
 
 const jwksUrl = process.env.JWKLS_URL
+
+interface Auth0TokenKey {
+  alg: string
+  kty: string
+  use: string
+  n: string
+  e: string
+  kid: string
+  x5t: string
+  x5c: Array<string>
+}
 
 export const handler = async (
   event: CustomAuthorizerEvent
@@ -51,16 +61,6 @@ export const handler = async (
 }
 
 async function verifyToken(authHeader: string): Promise<JwtPayload> {
-  interface Auth0TokenKey {
-    alg: string
-    kty: string
-    use: string
-    n: string
-    e: string
-    kid: string
-    x5t: string
-    x5c: Array<string>
-  }
   const auth0response = await Axios.get(jwksUrl)
   const jwtSigningDetails = auth0response.data
   const keys: Array<Auth0TokenKey> = jwtSigningDetails

@@ -1,5 +1,5 @@
-import * as AWS from 'aws-sdk'
-import * as AWSXRay from 'aws-xray-sdk'
+// import * as AWS from 'aws-sdk'
+// import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient, QueryOutput } from 'aws-sdk/clients/dynamodb'
 import { createLogger } from '../utils/logger'
 import { TodoItem } from '../models/TodoItem'
@@ -14,7 +14,7 @@ interface UpdateTodoKeyInterface {
 export class TodosAccess {
   private readonly tableName = process.env.TODOS_TABLE
   private readonly indexName = process.env.TODOS_CREATED_AT_INDEX
-  private XAWS = AWSXRay.captureAWS(AWS)
+  // private XAWS = AWSXRay.captureAWS(AWS)
   private logger = createLogger('TodosAccess')
   private documentClient = new DocumentClient()
 
@@ -25,6 +25,7 @@ export class TodosAccess {
         Item: item
       })
       .promise()
+    this.logger.info('Insert Document Successful')
 
     const todoItem: any = response.$response.data
 
@@ -53,6 +54,7 @@ export class TodosAccess {
         ExpressionAttributeValues: expressionAttributeValues
       })
       .promise()
+    this.logger.info('Update Document Successful')
 
     const todoItem: any = response.$response.data
 
@@ -66,6 +68,7 @@ export class TodosAccess {
         Key: key
       })
       .promise()
+    this.logger.info('Delete Document Successful')
 
     const todoItem: any = response.$response.data
 
@@ -83,6 +86,7 @@ export class TodosAccess {
         }
       })
       .promise()
+    this.logger.info('Get Document Successful')
 
     const todoItem = response.$response.data as QueryOutput
     return todoItem.Items

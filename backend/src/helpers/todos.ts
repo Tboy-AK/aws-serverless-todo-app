@@ -1,11 +1,13 @@
 import * as uuid from 'uuid'
-import * as createError from 'http-errors'
+// import * as createError from 'http-errors'
 import { createLogger } from '../utils/logger'
 import { TodosAccess } from './todosAccess'
 import { AttachmentUtils } from './attachmentUtils'
 import { TodoItem } from '../models/TodoItem'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
+
+const logger = createLogger('auth')
 
 // TODO: Implement businessLogic
 export const createTodo = async (
@@ -25,6 +27,7 @@ export const createTodo = async (
   }
 
   await new TodosAccess().createTodo(todoItem)
+  logger.info('Create Todo Successful')
 
   const result = { ...todoItem }
 
@@ -45,10 +48,12 @@ export const updateTodo = async (
 ) => {
   const todoKey = { userId, todoId }
   await new TodosAccess().updateTodo(todoUpdate, todoKey)
+  logger.info('Update Todo Successful')
 }
 
 export const getTodosForUser = async (userId: string) => {
   const todoItems = await new TodosAccess().getTodosForUser(userId)
+  logger.info('Get Todo Successful')
   const results = todoItems.map((item) => {
     const result = {
       todoId: item.todoId.S,
@@ -71,5 +76,6 @@ export const createAttachmentPresignedUrl = (
   const presignedUrl = new AttachmentUtils().createAttachmentPresignedUrl(
     imageId
   )
+  logger.info('Generate Presigned URL Successful')
   return presignedUrl
 }
