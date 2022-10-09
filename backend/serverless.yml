@@ -67,75 +67,75 @@ functions:
           authorizer:
             name: Auth
 
-  # # TODO: Configure this function -
-  # # Provide iamRoleStatements property. Decide the Actions and AWS Resource.
-  # # To refer to an AWS resource defined in the "Resources" section, you can use "Resource: !GetAtt <resource-name>.Arn"
-  # # To validate incoming HTTP requests, we have provided the request schemas in function definition below.
-  # CreateTodo:
-  #   handler: src/lambda/http/createTodo.handler
-  #   iamRoleStatementsInherit: true
-  #   iamRoleStatements:
-  #     - Effect: Allow
-  #       Action:
-  #         - dynamodb:PutItem
-  #       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
-  #   events:
-  #     - http:
-  #         method: post
-  #         path: todos
-  #         cors: true
-  #         authorizer:
-  #           name: Auth
-  #         request:
-  #           schemas:
-  #             application/json: ${file(models/create-todo-model.json)}
+  # TODO: Configure this function -
+  # Provide iamRoleStatements property. Decide the Actions and AWS Resource.
+  # To refer to an AWS resource defined in the "Resources" section, you can use "Resource: !GetAtt <resource-name>.Arn"
+  # To validate incoming HTTP requests, we have provided the request schemas in function definition below.
+  CreateTodo:
+    handler: src/lambda/http/createTodo.handler
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+    events:
+      - http:
+          method: post
+          path: todos
+          cors: true
+          authorizer:
+            name: Auth
+          request:
+            schemas:
+              application/json: ${file(models/create-todo-model.json)}
 
-  # # TODO: Configure this function
-  # # Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
-  # UpdateTodo:
-  #   handler: src/lambda/http/updateTodo.handler
-  #   iamRoleStatementsInherit: true
-  #   iamRoleStatements:
-  #     - Effect: Allow
-  #       Action:
-  #         - dynamodb:UpdateItem
-  #       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
-  #   events:
-  #     - http:
-  #         method: patch
-  #         path: todos/{todoId}
-  #         cors: true
-  #         authorizer:
-  #           name: Auth
-  #         request:
-  #           schemas:
-  #             application/json: ${file(models/update-todo-model.json)}
+  # TODO: Configure this function
+  # Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
+  UpdateTodo:
+    handler: src/lambda/http/updateTodo.handler
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+    events:
+      - http:
+          method: patch
+          path: todos/{todoId}
+          cors: true
+          authorizer:
+            name: Auth
+          request:
+            schemas:
+              application/json: ${file(models/update-todo-model.json)}
 
-  # # TODO: Configure this function
-  # # Provide property for setting up CORS, Authorizer, iamRoleStatements
-  # DeleteTodo:
-  #   handler: src/lambda/http/deleteTodo.handler
-  #   iamRoleStatementsInherit: true
-  #   iamRoleStatements:
-  #     - Effect: Allow
-  #       Action:
-  #         - dynamodb:DeleteItem
-  #       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
-  #   events:
-  #     - http:
-  #         method: delete
-  #         path: todos/{todoId}
-  #         authorizer:
-  #           name: Auth
+  # TODO: Configure this function
+  # Provide property for setting up CORS, Authorizer, iamRoleStatements
+  DeleteTodo:
+    handler: src/lambda/http/deleteTodo.handler
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+    events:
+      - http:
+          method: delete
+          path: todos/{todoId}
+          authorizer:
+            name: Auth
 
-  # # TODO: Configure this function
-  # # Provide property for setting up CORS, Authorizer, iamRoleStatements
-  # GenerateUploadUrl:
-  #   handler: src/lambda/http/generateUploadUrl.handler
-  #   events:
-  #     - http:
-  #         method: post
-  #         path: todos/{todoId}/attachment
+  # TODO: Configure this function
+  # Provide property for setting up CORS, Authorizer, iamRoleStatements
+  GenerateUploadUrl:
+    handler: src/lambda/http/generateUploadUrl.handler
+    events:
+      - http:
+          method: post
+          path: todos/{todoId}/attachment
 
 resources:
   Resources:
