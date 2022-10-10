@@ -39,6 +39,7 @@ export const createTodo = async (
 export const deleteTodo = async (todoId: string, userId: string) => {
   const todoKey = { userId, todoId }
   await new TodosAccess().deleteTodo(todoKey)
+  logger.info('Delete Todo Successful')
 }
 
 export const updateTodo = async (

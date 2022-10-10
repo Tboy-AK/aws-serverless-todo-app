@@ -40,6 +40,10 @@ provider:
       statements:
         - Effect: Allow
           Action:
+            - codedeploy:*
+          Resource: "*"
+        - Effect: Allow
+          Action:
             - xray:PutTelemetryRecords
             - xray:PutTraceSegments
           Resource: "*"
@@ -48,6 +52,7 @@ functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
     iamRoleStatementsInherit: true
+    tracing: "true"
 
   # TODO: Configure this function -
   # Provide iamRoleStatements property for performing Actions on DynamoDB
@@ -66,6 +71,7 @@ functions:
           cors: true
           authorizer:
             name: Auth
+    tracing: "true"
 
   # TODO: Configure this function -
   # Provide iamRoleStatements property. Decide the Actions and AWS Resource.
@@ -89,6 +95,7 @@ functions:
           request:
             schemas:
               application/json: ${file(models/create-todo-model.json)}
+    tracing: "true"
 
   # TODO: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
@@ -110,6 +117,7 @@ functions:
           request:
             schemas:
               application/json: ${file(models/update-todo-model.json)}
+    tracing: "true"
 
   # TODO: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements
@@ -128,6 +136,7 @@ functions:
           cors: true
           authorizer:
             name: Auth
+    tracing: "true"
 
   # TODO: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements
@@ -140,6 +149,7 @@ functions:
           cors: true
           authorizer:
             name: Auth
+    tracing: "true"
 
 resources:
   Resources:
@@ -148,6 +158,7 @@ resources:
       Type: AWS::ApiGateway::RestApi
       Properties:
         Name: udagramApiGatewayRestApi
+
     # TODO: Fill the properties
     # Feel free to change the names as you like.
     GatewayResponseDefault4XX:
@@ -159,7 +170,7 @@ resources:
           gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
         ResponseType: DEFAULT_4XX
         RestApiId:
-          Ref: "ApiGatewayRestApi"
+          Ref: ApiGatewayRestApi
 
     # TODO: Create a DynamoDB table with local secondary index and a composite key
     TodosTable:
