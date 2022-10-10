@@ -125,6 +125,7 @@ functions:
       - http:
           method: delete
           path: todos/{todoId}
+          cors: true
           authorizer:
             name: Auth
 
@@ -136,6 +137,9 @@ functions:
       - http:
           method: post
           path: todos/{todoId}/attachment
+          cors: true
+          authorizer:
+            name: Auth
 
 resources:
   Resources:

@@ -1,5 +1,4 @@
-// import * as AWS from 'aws-sdk'
-// import * as AWSXRay from 'aws-xray-sdk'
+import { captureAWSClient } from 'aws-xray-sdk'
 import { DocumentClient, QueryOutput } from 'aws-sdk/clients/dynamodb'
 import { createLogger } from '../utils/logger'
 import { TodoItem } from '../models/TodoItem'
@@ -11,12 +10,13 @@ interface UpdateTodoKeyInterface {
   todoId: string
 }
 
+const XAWS = captureAWSClient(DocumentClient)
+
 export class TodosAccess {
   private readonly tableName = process.env.TODOS_TABLE
   private readonly indexName = process.env.TODOS_CREATED_AT_INDEX
-  // private XAWS = AWSXRay.captureAWS(AWS)
   private logger = createLogger('TodosAccess')
-  private documentClient = new DocumentClient()
+  private documentClient = createDynamodbClient()
 
   createTodo = async (item: TodoItem) => {
     const response = await this.documentClient
@@ -91,4 +91,16 @@ export class TodosAccess {
     const todoItem = response.$response.data as QueryOutput
     return todoItem.Items
   }
+}
+
+function createDynamodbClient() {
+  if (process.env.IS_OFFLINE) {
+    const logger = createLogger('TodosAccess')
+    logger.info('Creating local DynamoDB client')
+    return new XAWS({
+      region: 'localhost',
+      endpoint: process.env.DYNAMO_DB_ENDPOINT_LOCAL
+    })
+  }
+  return new XAWS()
 }
