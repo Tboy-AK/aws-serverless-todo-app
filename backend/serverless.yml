@@ -7,6 +7,12 @@ plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
   - serverless-plugin-tracing
+  - serverless-dynamodb-local
+  - serverless-s3-local
+  - serverless-offline
+
+package:
+  individually: true
 
 provider:
   name: aws
@@ -27,6 +33,9 @@ provider:
     ATTACHMENT_S3_BUCKET: serverless-tealswan-todo-images-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
     JWKLS_URL: https://dev-1mhehu-j.us.auth0.com/.well-known/jwks.json
+    IS_OFFLINE: "true"
+    DYNAMODB_ENDPOINT_LOCAL: http://localhost:8000
+    ATTACHMENT_S3_BUCKET_ENDPOINT_LOCAL: http://localhost:4569
 
   logs:
     # Enable API Gateway logs
@@ -47,6 +56,22 @@ provider:
             - xray:PutTelemetryRecords
             - xray:PutTraceSegments
           Resource: "*"
+
+custom:
+  serverless-offline:
+    httpPort: 3003
+
+  dynamodb:
+    start:
+      port: 8008
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+
+  s3:
+    host: localhost
+    directory: /tmp
 
 functions:
   Auth:

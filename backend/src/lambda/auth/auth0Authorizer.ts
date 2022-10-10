@@ -20,6 +20,10 @@ interface Auth0TokenKey {
   x5c: Array<string>
 }
 
+interface Auth0TokenSuccessResponse {
+  keys: Array<Auth0TokenKey>
+}
+
 export const handler = async (
   event: CustomAuthorizerEvent
 ): Promise<CustomAuthorizerResult> => {
@@ -62,9 +66,10 @@ export const handler = async (
 
 async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const auth0response = await Axios.get(jwksUrl)
-  const jwtSigningDetails = auth0response.data
-  const keys: Array<Auth0TokenKey> = jwtSigningDetails
-  const cert = keys[0].x5c[0]
+  const jwtSigningDetails: Auth0TokenSuccessResponse = auth0response.data
+  const keys = jwtSigningDetails.keys
+  const certBodyText = keys[0].x5c[0]
+  const cert = structureCert(certBodyText)
   const token = getToken(authHeader)
 
   const jwt = verify(token, cert, {
@@ -85,4 +90,23 @@ function getToken(authHeader: string): string {
   const token = split[1]
 
   return token
+}
+
+function structureCert(cert: string) {
+  const BEGIN_CERTIFICATE = '-----BEGIN CERTIFICATE-----'
+  const END_CERTIFICATE = '-----END CERTIFICATE-----'
+  let body = ''
+  body += `${BEGIN_CERTIFICATE}\n`
+
+  for (let i = 0; i < cert.length; i++) {
+    if (i === cert.length - 1) body += `${cert[i]}\n`
+    else {
+      if (i % 64 === 0) body += '\n'
+      body += cert[i]
+    }
+  }
+
+  body += END_CERTIFICATE
+
+  return body
 }

@@ -7,7 +7,7 @@ import { TodoItem } from '../models/TodoItem'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 
-const logger = createLogger('auth')
+const logger = createLogger('Todos')
 
 // TODO: Implement businessLogic
 export const createTodo = async (

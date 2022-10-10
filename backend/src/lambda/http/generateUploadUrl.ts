@@ -22,9 +22,4 @@ export const handler = middy(
   }
 )
 
-handler.use(httpErrorHandler()).use(
-  cors({
-    credentials: true,
-    origin: '*'
-  })
-)
+handler.use(httpErrorHandler()).use(cors({ credentials: true }))

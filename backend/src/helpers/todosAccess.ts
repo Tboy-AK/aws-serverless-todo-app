@@ -10,7 +10,7 @@ interface UpdateTodoKeyInterface {
   todoId: string
 }
 
-const XAWS = captureAWSClient(DocumentClient)
+const XDocumentClient = captureAWSClient(DocumentClient)
 
 export class TodosAccess {
   private readonly tableName = process.env.TODOS_TABLE
@@ -97,10 +97,12 @@ function createDynamodbClient() {
   if (process.env.IS_OFFLINE) {
     const logger = createLogger('TodosAccess')
     logger.info('Creating local DynamoDB client')
-    return new XAWS({
+    return new XDocumentClient({
       region: 'localhost',
-      endpoint: process.env.DYNAMO_DB_ENDPOINT_LOCAL
+      endpoint: process.env.DYNAMODB_ENDPOINT_LOCAL
+      // accessKeyId: 'DEFAULT_ACCESS_KEY',
+      // secretAccessKey: 'DEFAULT_SECRET'
     })
   }
-  return new XAWS()
+  return new XDocumentClient()
 }
