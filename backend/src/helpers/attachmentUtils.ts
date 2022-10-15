@@ -1,6 +1,6 @@
 import { captureAWSClient } from 'aws-xray-sdk'
 import * as S3 from 'aws-sdk/clients/s3'
-import { Endpoint } from 'aws-sdk/lib/endpoint'
+import { Endpoint } from 'aws-sdk'
 import { createLogger } from '../utils/logger'
 
 const XS3 = captureAWSClient(S3)
