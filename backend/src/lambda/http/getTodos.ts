@@ -14,7 +14,6 @@ async function lambdaHandler(
   const userId = getUserId(event)
   /** @todo Write your code here */
   const todos = await getTodosForUser(userId)
-  console.log()
 
   return {
     statusCode: 200,
